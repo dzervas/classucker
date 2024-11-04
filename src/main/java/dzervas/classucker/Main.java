@@ -1,16 +1,24 @@
 package dzervas.classucker;
 
+import com.sun.tools.attach.VirtualMachine;
+
 public class Main {
 	public static void main(String[] args) {
-		System.out.println("Main application is running.");
+		if (args.length != 2) {
+			System.out.println("Usage: java -jar classucker.jar <PID> <path-to-agent-jar>");
+			return;
+		}
 
-		while (true) {
-			// Simulate some work
-			try {
-				Thread.sleep(5000); // Sleep for 5 seconds
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
+		String pid = args[0];
+		String agentPath = args[1];
+
+		try {
+			VirtualMachine vm = VirtualMachine.attach(pid);
+			vm.loadAgent(agentPath);
+			vm.detach();
+			System.out.println("Agent loaded successfully.");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
