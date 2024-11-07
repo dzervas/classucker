@@ -3,10 +3,13 @@ package dzervas.classucker;
 import fi.iki.elonen.NanoHTTPD;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.instrument.Instrumentation;
-import java.util.HashMap;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -15,6 +18,15 @@ import java.util.TreeSet;
 public class Agent {
 	public static void premain(String agentArgs, final Instrumentation inst) {
 		System.out.println("ClasSucker injected");
+
+		try {
+		FileWriter myWriter = new FileWriter("C:\\Users\\User\\Desktop\\test.txt");
+		myWriter.write("Files in Java might be tricky, but it is fun enough!" + new Date() + "\n");
+		myWriter.close();
+		} catch (IOException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
 
 		int port = 8080; // Default port
 		if (agentArgs != null && !agentArgs.isEmpty()) {
